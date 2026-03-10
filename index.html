@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Barberia | Precision Cuts · Old School Craft</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;700;900&family=Special+Elite&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #0a0a0a;
+            --bg-surface: #141414;
+            --cream: #f5e6d3;
+            --gold: #c9a84c;
+            --gold-muted: #a68b3e;
+            --bordeaux: #8b1a1a;
+            --text-secondary: #a19d95;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--cream);
+            font-family: 'Special Elite', system-ui, serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .nav-link,
+        .btn {
+            font-family: 'Special Elite', serif;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+        }
+
+        /* --- TEXTURAS Y OVERLAYS --- */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- NAVEGACIÓN --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.9), transparent);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            transition: var(--transition);
+        }
+
+        .nav-link {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--gold);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        /* Menú Hamburguesa Eliminado */
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        /* Decoración Parallax */
+        .hero-bg-text {
+            position: absolute;
+            font-size: 25vw;
+            color: rgba(255, 255, 255, 0.02);
+            font-weight: 700;
+            z-index: -1;
+            white-space: nowrap;
+            user-select: none;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 1.2s forwards 0.2s;
+        }
+
+        .logo-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-title::before,
+        .logo-title::after {
+            content: '';
+            height: 1px;
+            width: 80px;
+            background: var(--gold);
+            display: inline-block;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--cream);
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        /* --- BOTONES --- */
+        .btn {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            z-index: 1;
+            opacity: 0;
+            animation: fadeIn 1.2s forwards 0.6s;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--bg-deep);
+        }
+
+        .btn:hover:before {
+            left: 0;
+        }
+
+        /* --- SERVICIOS --- */
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .title-group {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .title-divider {
+            width: 50px;
+            height: 2px;
+            background: var(--bordeaux);
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            background: var(--bg-surface);
+            padding: 3rem 2rem;
+            border: 1px solid rgba(201, 168, 76, 0.05);
+            text-align: center;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 2rem;
+            fill: var(--gold);
+        }
+
+        .service-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .service-price {
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* --- GALERÍA --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: #111;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: grayscale(100%) contrast(110%);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(139, 26, 26, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        /* --- CTA RESERVAS --- */
+        .booking-cta {
+            background: var(--gold);
+            color: var(--bg-deep);
+            padding: 3.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-cta h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .booking-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-dark {
+            border-color: var(--bg-deep);
+            color: var(--bg-deep);
+            background: transparent;
+            opacity: 1;
+            animation: none;
+        }
+
+        .btn-dark:before {
+            background: var(--bg-deep);
+        }
+
+        .btn-dark:hover {
+            color: var(--gold);
+        }
+
+        /* --- MODAL --- */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.4s;
+        }
+
+        .modal-content {
+            background: var(--bg-surface);
+            width: 100%;
+            max-width: 600px;
+            padding: 4rem;
+            border: 1px solid var(--gold);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: transparent;
+            border: none;
+            color: var(--gold);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-family: 'Special Elite', serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-surface);
+            border: 1px solid rgba(245, 230, 211, 0.2);
+            color: var(--cream);
+            font-family: 'Special Elite', serif;
+            font-size: 1rem;
+            color-scheme: dark;
+            /* Corrige iconos nativos y menús de sistema */
+        }
+
+        option {
+            background: var(--bg-surface);
+            color: var(--cream);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(201, 168, 76, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            text-align: left;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .social-icon:hover svg {
+            fill: var(--gold);
+        }
+
+        .copyright {
+            margin-top: 4rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(245, 230, 211, 0.05);
+            padding-top: 2rem;
+        }
+
+        /* --- ANIMACIONES --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+        }
+
+        .reveal.active {
+            animation: fadeIn 1s forwards;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                gap: 2.2rem;
+                padding: 0 1rem;
+            }
+
+            .nav-link {
+                font-size: 0.95rem;
+                letter-spacing: 1px;
+            }
+
+            /* En producción esto sería un burger menu */
+            .logo-title::before,
+            .logo-title::after {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .booking-cta h2 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grain-overlay"></div>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="nav-container">
+            <a href="#home" class="nav-link">Inicio</a>
+            <a href="#servicios" class="nav-link">Servicios</a>
+            <a href="#galeria" class="nav-link">Galería</a>
+            <a href="#contacto" class="nav-link">Contacto</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="hero-bg-text">BARBERIA</div>
+        <div class="logo-container">
+            <h1 class="logo-title">LA BARBERIA</h1>
+            <span class="tagline">Desde 1998 · Cortes de Precisión · Estilo Clásico</span>
+        </div>
+        <button class="btn open-booking">RESERVAR AHORA</button>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="section">
+        <div class="title-group reveal">
+            <h2 class="section-title">NUESTROS SERVICIOS</h2>
+            <div class="title-divider"></div>
+        </div>
+
+        <div class="services-grid">
+            <!-- Servicio 1 -->
+            <div class="service-card reveal">
+                <h3 class="service-name">Corte Clásico</h3>
+                <p class="service-desc">El eterno estilo caballero con terminación a navaja.</p>
+                <div class="service-price">$25</div>
+            </div>
+
+            <!-- Servicio 2 -->
+            <div class="service-card reveal">
+                <h3 class="service-name">Fade + Diseño</h3>
+                <p class="service-desc">Degradados modernos y líneas personalizadas.</p>
+                <div class="service-price">$35</div>
+            </div>
+
+            <!-- Servicio 3 -->
+            <div class="service-card reveal">
+                <h3 class="service-name">Barba Completa</h3>
+                <p class="service-desc">Esculpido, hidratación y toalla caliente.</p>
+                <div class="service-price">$20</div>
+            </div>
+
+            <!-- Servicio 4 -->
+            <div class="service-card reveal">
+                <h3 class="service-name">Corte + Barba</h3>
+                <p class="service-desc">La experiencia completa para el hombre moderno.</p>
+                <div class="service-price">$45</div>
+            </div>
+
+            <!-- Servicio 5 -->
+            <div class="service-card reveal">
+                <h3 class="service-name">Tratamiento Capilar</h3>
+                <p class="service-desc">Exfoliación y nutrición profunda del cuero cabelludo.</p>
+                <div class="service-price">$30</div>
+            </div>
+
+            <!-- Servicio 6 -->
+            <div class="service-card reveal">
+                <h3 class="service-name">Afeitado con Navaja</h3>
+                <p class="service-desc">A la antigua usanza. Ritual de toallas y espuma.</p>
+                <div class="service-price">$40</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería -->
+    <section id="galeria" class="section">
+        <div class="title-group reveal">
+            <h2 class="section-title">NUESTRO ARTE</h2>
+            <div class="title-divider"></div>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=800&auto=format&fit=crop&sat=-100"
+                    class="gallery-img" alt="Barber Tools">
+                <div class="gallery-overlay"><span class="nav-link">Ver Detalle</span></div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800&auto=format&fit=crop&sat=-100"
+                    class="gallery-img" alt="Old School Shave">
+                <div class="gallery-overlay"><span class="nav-link">Ver Detalle</span></div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=800&auto=format&fit=crop&sat=-100"
+                    class="gallery-img" alt="Modern Sharp Fade">
+                <div class="gallery-overlay"><span class="nav-link">Ver Detalle</span></div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1654097803253-d481b6751f29?q=80&w=800&auto=format&fit=crop&sat=-100"
+                    class="gallery-img" alt="Professional Beard Trim Technique">
+                <div class="gallery-overlay"><span class="nav-link">Ver Detalle</span></div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1733995471061-eb3235d212b1?q=80&w=800&auto=format&fit=crop&sat=-100"
+                    class="gallery-img" alt="Precision Razor Lining">
+                <div class="gallery-overlay"><span class="nav-link">Ver Detalle</span></div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1593269244684-3f9c90ddf5a9?q=80&w=800&auto=format&fit=crop&sat=-100"
+                    class="gallery-img" alt="Professional Shave Mastery">
+                <div class="gallery-overlay"><span class="nav-link">Ver Detalle</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to action reservas -->
+    <section class="booking-cta">
+        <h2>¿LISTO PARA TU PRÓXIMO CORTE?</h2>
+        <p>Reserva en menos de 60 segundos</p>
+        <button class="btn btn-dark open-booking">AGENDAR TURNO</button>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="footer-grid">
+            <div>
+                <h3>UBICACIÓN</h3>
+                <p>Les Canals 4</p>
+                <p>Andorra la Vella</p>
+            </div>
+            <div>
+                <h3>HORARIOS</h3>
+                <p>Lun-Vie: 10:00-20:00</p>
+                <p>Sáb: 09:00-18:00</p>
+                <p>Dom: Cerrado</p>
+            </div>
+            <div>
+                <h3>SÍGUENOS</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.134l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4C18.39,20 20,18.39 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.2,12A5.2,5.2 0 0,1 12,17.2A5.2,5.2 0 0,1 6.8,12A5.2,5.2 0 0,1 12,6.8A5.2,5.2 0 0,1 17.2,12M12,8.6A3.4,3.4 0 0,0 8.6,12A3.4,3.4 0 0,0 12,15.4A3.4,3.4 0 0,0 15.4,12A3.4,3.4 0 0,0 12,8.6M17.8,4.8A1.1,1.1 0 1,1 16.7,5.9A1.1,1.1 0 0,1 17.8,4.8Z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96C18.34 21.21 22 17.06 22 12.06C22 6.53 17.5 2.04 12 2.04Z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2026 LA BARBERIA - PRECISION CUTS - TODOS LOS DERECHOS RESERVADOS
+        </div>
+    </footer>
+
+    <!-- Modal Reserva -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 class="section-title" style="font-size: 2rem; margin-bottom: 2rem;">RESERVA TU TURNO</h2>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" required placeholder="p.ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" required placeholder="+34 000 000 000">
+                </div>
+                <div class="form-group">
+                    <label>Servicio</label>
+                    <select required>
+                        <option value="">Selecciona un servicio</option>
+                        <option>Corte Clásico</option>
+                        <option>Fade + Diseño</option>
+                        <option>Barba Completa</option>
+                        <option>Corte + Barba</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora</label>
+                        <input type="time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Barbero Preferido</label>
+                    <select>
+                        <option>Cualquier Barbero</option>
+                        <option>Juan Carlos</option>
+                        <option>Guillermo</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" style="width: 100%; opacity: 1; animation: none;">CONFIRMAR
+                    RESERVA</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Animaciones Reveal on Scroll
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Efecto Stagger: Si es un elemento en grid, añadir delay acumulativo
+                    const parent = entry.target.parentElement;
+                    if (parent.classList.contains('services-grid') || parent.classList.contains('gallery-grid')) {
+                        const index = Array.from(parent.children).indexOf(entry.target);
+                        entry.target.style.transitionDelay = `${index * 0.1}s`;
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Manejo del Modal
+        const modal = document.getElementById('bookingModal');
+        const openBtns = document.querySelectorAll('.open-booking');
+        const closeBtn = document.querySelector('.close-modal');
+
+        openBtns.forEach(btn => {
+            btn.onclick = () => modal.classList.add('active');
+        });
+
+        closeBtn.onclick = () => modal.classList.remove('active');
+
+        window.onclick = (e) => {
+            if (e.target == modal) modal.classList.remove('active');
+        };
+
+        // Manejo del Formulario
+        document.getElementById('bookingForm').onsubmit = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+
+            btn.innerText = "PROCESANDO...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert("¡Reserva Confirmada! Te hemos enviado un SMS con los detalles de tu cita.");
+                modal.classList.remove('active');
+                e.target.reset();
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }, 1500);
+        };
+
+        // Efecto Parallax Suave en Hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const bgText = document.querySelector('.hero-bg-text');
+            bgText.style.transform = `translateY(${-50 + (scrolled * 0.05)}%) translateX(${scrolled * 0.1}px)`;
+
+            const logo = document.querySelector('.logo-container');
+            logo.style.transform = `translateY(${scrolled * 0.3}px)`;
+            logo.style.opacity = 1 - (scrolled / 500);
+        });
+    </script>
+</body>
+
+</html>
