@@ -13,7 +13,9 @@
         href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
         rel="stylesheet">
 
-    <script src="https://app.cal.com/embed/embed.js" defer></script>
+    <script type="text/javascript">
+        (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+    </script>
 
     <style>
         :root {
@@ -736,7 +738,7 @@
             <div class="title-divider"></div>
             <p class="booking-subtitle">Selecciona fecha, hora y servicio</p>
         </div>
-        <div id="cal-booking-widget" class="cal-widget-wrapper reveal">
+        <div id="my-cal-inline-barberia" class="cal-widget-wrapper reveal">
             <!-- Cal.com inline widget se renderiza aqui -->
         </div>
     </section>
@@ -817,19 +819,15 @@
             };
         });
 
-        // Inicializar Cal.com inline widget
-        window.addEventListener('load', () => {
-            if (typeof Cal !== 'undefined') {
-                Cal('init', 'barberia', { origin: 'https://app.cal.com' });
-                Cal.ns.barberia('inline', {
-                    element: document.getElementById('cal-booking-widget'),
-                    calLink: 'barberia/reservas',
-                    config: {
-                        layout: 'month_view',
-                    }
-                });
-            }
+        Cal("init", "barberia", {origin:"https://app.cal.com"});
+
+        Cal.ns.barberia("inline", {
+            elementOrSelector:"#my-cal-inline-barberia",
+            config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"dark"},
+            calLink: "cafeteria/barberia",
         });
+
+        Cal.ns.barberia("ui", {"theme":"dark","hideEventTypeDetails":false,"layout":"month_view"});
 
         // Efecto Parallax Suave en Hero
         window.addEventListener('scroll', () => {
