@@ -13,6 +13,8 @@
         href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
         rel="stylesheet">
 
+    <script src="https://app.cal.com/embed/embed.js" defer></script>
+
     <style>
         :root {
             --bg-deep: #0a0a0a;
@@ -442,6 +444,33 @@
             border-color: var(--gold);
         }
 
+        /* --- SECCIÓN RESERVAS --- */
+        .booking-section {
+            padding: 4rem 2rem 6rem;
+        }
+
+        .booking-subtitle {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .cal-widget-wrapper {
+            max-width: 900px;
+            margin: 2.5rem auto 0;
+            background: var(--bg-surface);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 4px;
+            padding: 2rem;
+            min-height: 600px;
+        }
+
+        .cal-widget-wrapper iframe {
+            border: none;
+            border-radius: 4px;
+        }
+
         /* --- FOOTER --- */
         footer {
             padding: 2.5rem 2rem;
@@ -585,6 +614,7 @@
             <a href="#home" class="nav-link">Inicio</a>
             <a href="#servicios" class="nav-link">Servicios</a>
             <a href="#galeria" class="nav-link">Galería</a>
+            <a href="#reservas" class="nav-link">Reservas</a>
             <a href="#contacto" class="nav-link">Contacto</a>
         </div>
     </nav>
@@ -699,6 +729,18 @@
         <button class="btn btn-dark open-booking">RESERVAR</button>
     </section>
 
+    <!-- Sección de Reservas con Calendario -->
+    <section id="reservas" class="section booking-section">
+        <div class="title-group reveal">
+            <h2 class="section-title">RESERVA TU CITA</h2>
+            <div class="title-divider"></div>
+            <p class="booking-subtitle">Selecciona fecha, hora y servicio</p>
+        </div>
+        <div id="cal-booking-widget" class="cal-widget-wrapper reveal">
+            <!-- Cal.com inline widget se renderiza aqui -->
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer id="contacto">
         <div class="footer-grid">
@@ -742,52 +784,7 @@
         </div>
     </footer>
 
-    <!-- Modal Reserva -->
-    <div id="bookingModal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal">&times;</button>
-            <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 1.5rem;">RESERVA</h2>
-            <form id="bookingForm">
-                <div class="form-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" required placeholder="p.ej. Juan Pérez">
-                </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="tel" required placeholder="+34 000 000 000">
-                </div>
-                <div class="form-group">
-                    <label>Servicio</label>
-                    <select required>
-                        <option value="">Selecciona un servicio</option>
-                        <option>Corte Clásico</option>
-                        <option>Fade + Diseño</option>
-                        <option>Barba Completa</option>
-                        <option>Corte + Barba</option>
-                    </select>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Hora</label>
-                        <input type="time" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Barbero Preferido</label>
-                    <select>
-                        <option>Cualquier Barbero</option>
-                        <option>Juan Carlos</option>
-                        <option>Guillermo</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn" style="width: 100%; opacity: 1; animation: none;">PIDE UNA CITA</button>
-            </form>
-        </div>
-    </div>
+
 
     <script>
         // Animaciones Reveal on Scroll
@@ -811,38 +808,28 @@
 
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-        // Manejo del Modal
-        const modal = document.getElementById('bookingModal');
+        // Cal.com Widget
         const openBtns = document.querySelectorAll('.open-booking');
-        const closeBtn = document.querySelector('.close-modal');
 
         openBtns.forEach(btn => {
-            btn.onclick = () => modal.classList.add('active');
+            btn.onclick = () => {
+                document.getElementById('reservas').scrollIntoView({ behavior: 'smooth' });
+            };
         });
 
-        closeBtn.onclick = () => modal.classList.remove('active');
-
-        window.onclick = (e) => {
-            if (e.target == modal) modal.classList.remove('active');
-        };
-
-        // Manejo del Formulario
-        document.getElementById('bookingForm').onsubmit = (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-
-            btn.innerText = "PROCESANDO...";
-            btn.disabled = true;
-
-            setTimeout(() => {
-                alert("¡Reserva Confirmada! Te hemos enviado un SMS con los detalles de tu cita.");
-                modal.classList.remove('active');
-                e.target.reset();
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }, 1500);
-        };
+        // Inicializar Cal.com inline widget
+        window.addEventListener('load', () => {
+            if (typeof Cal !== 'undefined') {
+                Cal('init', 'barberia', { origin: 'https://app.cal.com' });
+                Cal.ns.barberia('inline', {
+                    element: document.getElementById('cal-booking-widget'),
+                    calLink: 'barberia/reservas',
+                    config: {
+                        layout: 'month_view',
+                    }
+                });
+            }
+        });
 
         // Efecto Parallax Suave en Hero
         window.addEventListener('scroll', () => {
