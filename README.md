@@ -18,7 +18,7 @@ Landing Page premium para una barbería de lujo industrial con estética vintage
 - **Interacciones**:
   - Animaciones de carga escalonadas (staggered reveal) al hacer scroll.
   - Efecto Parallax suave en la sección Hero.
-  - Modal de reserva funcional con validación y confirmación.
+  - Reservas online integradas con Cal.com (calendario inline con tema dark).
   - Navegación con scroll suave (smooth scroll).
 - **Llamadas a la Acción (CTA)**: Botones interactivos con efectos de relleno dorado.
 
