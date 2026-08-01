@@ -14,3 +14,28 @@
 - **Tarea**: Cambia para usar este modelo: google/gemma-4-31b-it:free
 - **Herramientas**: bash
 - **Resultado**: Edita opencode.json o crea uno con: {   "$schema": "https://opencode.ai/config.json",   "model": "google/gemma-4-31b-it:free" }
+
+## 2026-04-16 13:47
+- **Tarea**: Hazlo tu
+- **Herramientas**: escritura de archivos, lectura de archivos, bash
+- **Resultado**: Aitivity persistedựu…….”  /template…….”  …….”  …….”  …….”   срещу-post/useьёasterxml/write…….”  -author everything-templateृति EOL
+
+## 2026-04-17 22:16
+- **Tarea**: de que va este proyecto?
+- **Herramientas**: bash, lectura de archivos
+- **Resultado**: Landing es un sistema de captación de leads para automatización local enfocado en inmobiliarias, estética y similares, con modo oscuro y visualización 3D.
+
+## 2026-04-20 18:53
+- **Tarea**: Dime qué porcentaje del CPU se está usando ahora mismo
+- **Herramientas**: bash
+- **Resultado**: 2.0%
+
+## 2026-04-20 18:55
+- **Tarea**: Y memoria ram?
+- **Herramientas**: bash
+- **Resultado**: 47.9%
+
+## 2026-04-20 19:10
+- **Tarea**: Cuál es el proceso que mas ram utiliza?
+- **Herramientas**: bash
+- **Resultado**: El proceso que más RAM usa es /usr/lib/node_modules/opencode-ai/bin/.opencode (PID 2083696) con 6.9%.
